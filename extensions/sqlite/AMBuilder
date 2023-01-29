@@ -16,6 +16,7 @@ for arch in SM.archs:
     'SQLITE_THREADSAFE',
     'SQLITE_USE_URI',
     'SQLITE_ALLOW_URI_AUTHORITY',
+    'SQLITE_ENABLE_MATH_FUNCTIONS',
   ]
   if builder.target.platform == 'linux':
     binary.compiler.postlink += ['-ldl', '-lpthread']
