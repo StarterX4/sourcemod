@@ -96,7 +96,7 @@ jobs:
           ambuild
 
       - name: pack
-        working-directory: sourcemod/sourcemod/sourcemod
+        working-directory: /home/runner/work/sourcemod/sourcemod/sourcemod
         run: tar -cf pak.tar.zst package --zstd
       
       - name: Uploading package
