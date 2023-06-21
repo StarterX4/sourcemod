@@ -12,7 +12,7 @@ jobs:
   test:
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-20.04]
         include:
           - os: ubuntu-latest
             os_short: linux
@@ -22,8 +22,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os_short }}-${{ matrix.compiler_cc }}
     env:
-      SDKS: '["sdk2013","tf2","l4d2","csgo"]'
-      ARCH: x86,x86_64
+      SDKS: '["l4d2"]'
+      ARCH: x86
       DEPENDENCIES_FOLDER: dependencies
       DEPENDENCIES_ROOT: ${{ github.workspace }}/dependencies
       MYSQL_VERSION: '5.5'
@@ -82,8 +82,8 @@ jobs:
       - name: Select clang compiler
         if: startsWith(runner.os, 'Linux')
         run: |
-          echo "CC=${{ matrix.compiler_cc }} -Ofast -ffast-math" >> $GITHUB_ENV
-          echo "CXX=${{ matrix.compiler_cxx }} -Ofast -ffast-math" >> $GITHUB_ENV
+          echo "CC=${{ matrix.compiler_cc }} -Ofast -ffast-math -Wno-error -pipe -fno-plt -fopenmp-simd -fexceptions -ftree-vectorize -ftree-slp-vectorize -mpclmul -fno-trapping-math -march=x86-64-v3 -mtune=skylake" >> $GITHUB_ENV
+          echo "CXX=${{ matrix.compiler_cxx }} -Ofast -ffast-math -Wno-error -pipe -fno-plt -fopenmp-simd -fexceptions -ftree-vectorize -ftree-slp-vectorize -mpclmul -fno-trapping-math -march=x86-64-v3 -mtune=skylake" >> $GITHUB_ENV
           ${{ matrix.compiler_cc }} --version
           ${{ matrix.compiler_cxx }} --version
 
@@ -95,25 +95,25 @@ jobs:
           python ../configure.py --enable-optimize --sdks=${{ join(fromJSON(env.SDKS)) }} --targets=${{ env.ARCH }} --mms-path=${{ env.DEPENDENCIES_ROOT }}/mmsource-${{ env.MMSOURCE_VERSION }} --hl2sdk-root=${{ env.DEPENDENCIES_ROOT }} --mysql-path=${{ env.DEPENDENCIES_ROOT }}/mysql-${{ env.MYSQL_VERSION }} --mysql64-path=${{ env.DEPENDENCIES_ROOT }}/mysql-${{ env.MYSQL_VERSION }}-x86_64
           ambuild
 
-      - name: pack
-        working-directory: /home/runner/work/sourcemod/sourcemod/sourcemod
-        run: tar -cf pak.tar.zst package --zstd
+      #- name: pack
+      #  working-directory: /home/runner/work/sourcemod/sourcemod/sourcemod/build
+      #  run: tar -cf pak.tar.zst package --zstd
       
       - name: Uploading package
         uses: actions/upload-artifact@v3
         with:
           name: sourcemod-sm1.12-${{ matrix.os_short }}
-          path: /home/runner/work/sourcemod/sourcemod/sourcemod/package
+          path: /home/runner/work/sourcemod/sourcemod/sourcemod/build/package
           
-      - name: Uploading package
-        uses: actions/upload-artifact@v3
-        with:
-          name: sourcemod-sm1.12-${{ matrix.os_short }}.tar.zst
-          path: /home/runner/work/sourcemod/sourcemod/sourcemod/pak.tar.zst
+     # - name: Uploading package
+     #   uses: actions/upload-artifact@v3
+     #   with:
+     #     name: sourcemod-sm1.12-${{ matrix.os_short }}.tar.zst
+     #     path: /home/runner/work/sourcemod/sourcemod/sourcemod/pak.tar.zst
           
-      - name: Uploading package
-        uses: actions/upload-artifact@v3
-        with:
-          name: sourcemod-sm1.12-${{ matrix.os_short }}-full
-          path: /home/runner/work/sourcemod/sourcemod/sourcemod
+    #  - name: Uploading package
+    #    uses: actions/upload-artifact@v3
+    #    with:
+    #      name: sourcemod-sm1.12-${{ matrix.os_short }}-full
+    #      path: /home/runner/work/sourcemod/sourcemod/sourcemod
 
