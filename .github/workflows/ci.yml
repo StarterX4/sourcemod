@@ -82,8 +82,8 @@ jobs:
       - name: Select clang compiler
         if: startsWith(runner.os, 'Linux')
         run: |
-          echo "CC=${{ matrix.compiler_cc }} -Ofast -ffast-math -Wno-error -pipe -fno-plt -fopenmp-simd -fexceptions -ftree-vectorize -ftree-slp-vectorize -mpclmul -fno-trapping-math -march=x86-64-v3 -mtune=skylake" >> $GITHUB_ENV
-          echo "CXX=${{ matrix.compiler_cxx }} -Ofast -ffast-math -Wno-error -pipe -fno-plt -fopenmp-simd -fexceptions -ftree-vectorize -ftree-slp-vectorize -mpclmul -fno-trapping-math -march=x86-64-v3 -mtune=skylake" >> $GITHUB_ENV
+          echo "CC=${{ matrix.compiler_cc }} -Ofast -ffast-math -Wno-error -pipe -fno-plt -fopenmp-simd -fexceptions -ftree-vectorize -ftree-slp-vectorize -mpclmul -fno-trapping-math -march=skylake -mtune=skylake" >> $GITHUB_ENV
+          echo "CXX=${{ matrix.compiler_cxx }} -Ofast -ffast-math -Wno-error -pipe -fno-plt -fopenmp-simd -fexceptions -ftree-vectorize -ftree-slp-vectorize -mpclmul -fno-trapping-math -march=skylake -mtune=skylake" >> $GITHUB_ENV
           ${{ matrix.compiler_cc }} --version
           ${{ matrix.compiler_cxx }} --version
 
