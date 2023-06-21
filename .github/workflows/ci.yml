@@ -14,7 +14,7 @@ jobs:
       matrix:
         os: [ubuntu-20.04]
         include:
-          - os: ubuntu-latest
+          - os: ubuntu-20.04
             os_short: linux
             compiler_cc: clang
             compiler_cxx: clang++
