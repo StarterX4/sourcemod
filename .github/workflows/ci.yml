@@ -74,6 +74,11 @@ jobs:
             libc6-dev libc6-dev-i386 linux-libc-dev \
             linux-libc-dev:i386 lib32z1-dev ${{ matrix.compiler_cc }}
 
+      - name: Setup ccache action
+  # You may pin to the exact commit or the version.
+  # uses: Chocobo1/setup-ccache-action@c1caac940f0719c5709586f4e48fb2cfea86086b
+        uses: Chocobo1/setup-ccache-action@v1.3.6
+    
       - name: Select clang compiler
         if: startsWith(runner.os, 'Linux')
         run: |
@@ -89,3 +94,9 @@ jobs:
           cd build
           python ../configure.py --enable-optimize --sdks=${{ join(fromJSON(env.SDKS)) }} --targets=${{ env.ARCH }} --mms-path=${{ env.DEPENDENCIES_ROOT }}/mmsource-${{ env.MMSOURCE_VERSION }} --hl2sdk-root=${{ env.DEPENDENCIES_ROOT }} --mysql-path=${{ env.DEPENDENCIES_ROOT }}/mysql-${{ env.MYSQL_VERSION }} --mysql64-path=${{ env.DEPENDENCIES_ROOT }}/mysql-${{ env.MYSQL_VERSION }}-x86_64
           ambuild
+
+      - name: Uploading package
+        uses: actions/upload-artifact@v3
+        with:
+          name: sourcemod-sm1.12-${{ matrix.os_short }}-${{ env.GITHUB_SHA_SHORT }}
+          path: sourcemod/sourcemod/sourcemod/package
